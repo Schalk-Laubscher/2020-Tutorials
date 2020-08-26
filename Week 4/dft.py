@@ -15,6 +15,8 @@ def function(x):
 def approx(x, N):
     output = 0.0 
     for n in range(N):
+        if n % 2 == 0:
+            continue
                 # Term n ->
         output += np.sin(n*x) * 4 / (np.pi * n)
     return output
