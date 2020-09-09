@@ -5,15 +5,14 @@ Spyder Editor
 This is a temporary script file.
 """
 
+import numpy as np
+
 
 def fact(n):
     """Calculate n!"""
     if n == 0:
         return 1
     return n * fact(n-1)
-
-
-print(f"5! is equal to {fact(5)}")
 
 
 def oldExpTaylor(n, x):
@@ -42,12 +41,25 @@ def expTaylor(n, x):
     ...
     Term k. x**k / fact(k) = Term (k-1) * x/k
     """
-    term   = 1
-    output = term  # Start with the first term, to avoid ZeroDivisionError
+    # Start with the first term, to avoid ZeroDivisionError
+    term   = np.ones_like(x)
+    output = term.copy()
     for k in range(1, n):
         term   *= x / k
         output += term
     return output
 
 
-print(f"exp(2) is approximately {expTaylor(100, 2)}")
+def lnTaylor(n, x):
+    """Calculate ln(1+x) with n terms around x=1."""
+    term   = -np.ones_like(x, dtype=float)  # Want to use floats!
+    output = np.full_like(x, np.log(2.), dtype=float)  # Zeroth term
+    for k in range(1, n):
+        term   *= (1 - x) / 2
+        output += term / k
+    return output
+
+
+if __name__ == '__main__':
+    print(f"5! is equal to {fact(5)}")
+    print(f"exp(2) is approximately {expTaylor(100, 2)}")
