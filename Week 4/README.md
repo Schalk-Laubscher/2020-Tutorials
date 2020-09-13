@@ -15,6 +15,9 @@ So, this week the code focuses on:
    to customise how the numbers on your display are formatted.
    ```python
    ax.xaxis.set_major_formatter(FuncFormatter(
+                                      # Use LaTeX symbols within $...$
+                                      # |
+                                      # +----
         lambda val, _: f'{val/np.pi:.0g}$\pi$' if val else '0'
                         # +------------      # +--------------
                         # |                  # |
