@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D  # noqa: F401
+
+TOL = np.finfo(float).resolution
 
 # Set up our constants
 Lx = 10 * 0.01   # [m]
@@ -14,14 +15,18 @@ alpha = k / (c_p * rho)  # [m^2/s]
 
 dx = 2.5 * 0.01  # [m]
 dy = 2.5 * 0.01  # [m]
-dt = 10
+dt = 100
 
 sigma_x = alpha * dt / dx**2
 sigma_y = alpha * dt / dy**2
 
 # Create out arrays
-nx = int(Lx // dx) + 1
-ny = int(Ly // dy) + 1
+nx = int((Lx+TOL) // dx) + 1
+ny = int((Ly+TOL) // dy) + 1  # NOTE: Tolerance for floating point error
+
+# Dividing small floating point numbers sometimes doesn't give the expected
+# answer. For example, 0.075 / 0.025 = 2.9999999999999996
+# Without the tolerance, this gives ny = 3 rather than the expected 4.
 
 # Configure initial conditions
 current_temperature = (50+273.15) * np.ones(ny*nx)
@@ -69,31 +74,5 @@ for _ in range(100):
 
     recording.append(current_temperature)
 
-plt.plot([t[12] for t in recording])
-plt.show()
-
-
-# # Propogate the diffusion equation through time
-# nt = int(T // dt) + 1
-# for t in range(nt):
-#     next_temperature = np.zeros(nx)
-
-#     for i in range(1, nx-1):
-#         second_deriv = (
-#             current_temperature[i+1]
-#             - 2*current_temperature[i]
-#             + current_temperature[i-1]
-#         ) / dx**2
-
-#         next_temperature[i] = (
-#             current_temperature[i]
-#             + dt * c**2 * second_deriv
-#         )
-
-#     # Apply boundary conditions
-#     next_temperature[0] = (4*next_temperature[1] - next_temperature[2]) / 3
-#     next_temperature[nx-1] = (
-#         4*next_temperature[nx-2] - next_temperature[nx-3]) / 3
-
-#     current_temperature = next_temperature.copy()
-#     recording.append(current_temperature)
+# plt.plot([t[12] for t in recording])
+# plt.show()
