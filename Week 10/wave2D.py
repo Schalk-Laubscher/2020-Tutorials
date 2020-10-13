@@ -101,22 +101,26 @@ class WaveEquationFD:
             if k == 0:
                 for j in range(1, self.My):
                     for i in range(1, self.Mx):
-                        self.u[i, j] = 0.5*(self.rx*(self.u_1[i-1, j] + self.u_1[i+1, j])) \
-                            + 0.5*(self.ry*(self.u_1[i, j-1] + self.u_1[i, j+1])) \
-                            + self.rxy1*self.u[i, j] + \
-                            self.dt*self.ut[i, j]
+                        self.u[i, j] = (
+                            .5*(self.rx*(self.u_1[i-1, j] + self.u_1[i+1, j]))
+                            + .5*(self.ry*(self.u_1[i, j-1] + self.u_1[i, j+1]))
+                            + self.rxy1*self.u[i, j] + self.dt*self.ut[i, j]
+                        )
             else:
                 for j in range(1, self.My):
                     for i in range(1, self.Mx):
-                        self.u[i, j] = self.rx*(self.u_1[i-1, j] + self.u_1[i+1, j]) \
-                            + self.ry*(self.u_1[i, j-1] + self.u_1[i, j+1]) \
+                        self.u[i, j] = (
+                            self.rx*(self.u_1[i-1, j] + self.u_1[i+1, j])
+                            + self.ry*(self.u_1[i, j-1] + self.u_1[i, j+1])
                             + self.rxy2*self.u[i, j] - u_2[i, j]
+                        )
 
             u_2 = self.u_1.copy()
             self.u_1 = self.u.copy()
 
-            wframe = ax.plot_surface(xx, yy, self.u, cmap=cm.coolwarm, linewidth=2,
-                                     antialiased=False)
+            wframe = ax.plot_surface(
+                xx, yy, self.u, cmap=cm.coolwarm, linewidth=2,
+                antialiased=False)
 
             ax.set_xlim3d(0, 2.0)
             ax.set_ylim3d(0, 2.0)
@@ -143,7 +147,7 @@ if __name__ == "__main__":
     main()
 
 
-#N = 200
-#D = 0.25
-#Mx = 50
-#My = 50
+# N = 200
+# D = 0.25
+# Mx = 50
+# My = 50
