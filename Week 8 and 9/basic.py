@@ -46,7 +46,7 @@ current_temperature[2*nx-1:4*nx-1:nx] = right_edge
 
 recording = []
 
-implicit_matrix = np.zeros((nx*ny, nx*ny), dtype=float)
+implicit_matrix = np.zeros((nx*ny, nx*ny))
 
 for i in range(ny):
     for j in range(nx):
